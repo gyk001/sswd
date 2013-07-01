@@ -1,10 +1,10 @@
-
+var server = require('../service/server');
 /*
  * GET home page.
  */
 exports.index = function(req, res){
 	if(req.session.user){
-  		res.render('index.ejs', { title: 'xxxxx' ,username:req.session.success });
+  		res.render('index.jade', { rooms: server.rooms, abc:'abcdefg' });
   	}else{
   		res.redirect('/login');
   	}

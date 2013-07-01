@@ -1,0 +1,9 @@
+li.span3(id="room-#{room.name}")
+  .thumbnail
+    //img(data-src="holder.js/300x200",alt="300x200",style="width: 300px; height: 200px;")
+    .caption 
+      h3 #{room.name}
+      p 游戏状态：#{room.status}
+      p 创建时间：#{room.createTime}
+      p 人数：#{room.player.length}
+      button.btn.btn-primary(data-room="#{room.name}") 加入房间

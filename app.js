@@ -6,11 +6,13 @@
 var express = require('express')
   , app = express()
   , routes = require('./routes')
-  , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
   , server = http.createServer(app)
   , io = require('socket.io').listen(server);
+
+var gameServer= require('./service/server')
+  , room = require('./routes/room');
 
 // all environments
 app.engine('jade', require('jade').__express);
@@ -33,10 +35,15 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.get('/logout', routes.logout);
 app.post('/login', routes.doLogin);
+app.get('/login', routes.doLogin);
+app.get('/room/list', room.list);
+app.put('/room/new/:roomName', room.create);
+app.get('/room/join/:roomName', room.join);
 
 /*
 app.use(function(req, res, next){
@@ -66,6 +73,8 @@ var news = io
   .on('connection', function (socket) {
     socket.emit('item', { news: 'item' });
   });
+
+gameServer.init();
 
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

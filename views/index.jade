@@ -1,0 +1,27 @@
+!!! 5
+html
+  head
+    title=title
+    include include/head
+    link(href='/stylesheets/style.css', rel='stylesheet')
+    script(src='/socket.io/socket.io.js')  
+    script(src='/javascripts/room.js')
+    script(src='/javascripts/jade.js')
+  body
+    include include/menu
+    //header.jumbotron.subhead
+      .container
+        h1 组件
+        p.lead xxx
+    .container
+      .row
+        .span3 bs-docs-sidebar
+          input(id="ipt-new-room")
+          button.btn.btn-primary(id="btn-new-room") 创建房间
+        .span9
+          ul.thumbnails(id="rooms")
+            - for (var roomName in rooms)
+              - var room = rooms[roomName]
+                include snippets/room
+
+              
