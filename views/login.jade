@@ -4,15 +4,18 @@ html
     title=title
     include include/head
     link(rel='stylesheet', href='/stylesheets/login.css')
+    script(src='/javascripts/login.js')  
   body
     .container
-      p=msgs01
-      form.form-signin(method='post',action='/login')
+      form#frm-login.form-signin(method='post',action='/login')
         h2.form-signin-heading 需要登录哟
-        input.input-block-level(type='text', placeholder='用户名')
-        input.input-block-level(type='password', placeholder='密码')
+        span#error.label.label-important
+        input.input-block-level(name='user[loginName]',type='text', placeholder='用户名')
+        input.input-block-level(name='user[password]',type='password', placeholder='密码')
         label.checkbox
           input(type='checkbox', value='remember-me')
           | 记住我
-        button.btn.btn-large.btn-primary(type='submit') 登录
+        p
+          button#btn-login.btn.btn-large.btn-primary 立即登录
+          a(href='/user/reg') 注册新用户
     // /container

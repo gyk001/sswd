@@ -1,12 +1,31 @@
 var server = require('../service/server');
+var Room = require('../db/Room');
+
 var jade = require('jade');
-/*
- * GET users listing.
- */
+
+
+
 
 exports.list = function(req, res){
-	res.render('room.jade', { title: 'xxxxx' ,username:req.session.success });
+	Room.list({},function(err,rooms){
+        if(err){
+          throw new Error('获取房间列表异常',err);
+        }
+  		res.render('room.jade', { rooms: rooms, abc:'abcdefg' });
+    })
 };
+
+exports.my = function(req, res){
+	var user = user;
+	Room.list({},function(err,rooms){
+        if(err){
+          throw new Error('获取房间列表异常',err);
+        }
+  		res.render('room.jade', { rooms: rooms, abc:'abcdefg' });
+    })
+};
+
+      
 
 exports.join = function(req,res){
 	var roomName = req.params.roomName;

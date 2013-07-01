@@ -1,0 +1,18 @@
+!!! 5
+html
+  head
+    title=title
+    include include/head
+    link(rel='stylesheet', href='/stylesheets/login.css')
+    script(src='/javascripts/reg.js')
+  body
+    .container
+      form#frm-reg.form-signin(method='post',action='/user')
+        h2.form-signin-heading 快速注册
+        p#error.label.label-important
+        input.input-block-level(name='user[loginName]',type='text', placeholder='账号')
+        input.input-block-level(name='user[nickname]',type='text', placeholder='昵称')          
+        input.input-block-level(name='user[password]',type='password', placeholder='密码')
+        button#btn-reg.btn.btn-large.btn-primary 注册
+
+    // /container
