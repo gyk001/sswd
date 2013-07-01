@@ -1,4 +1,6 @@
 var room = require('./room');
+var	db = require('../db');
+var Room = require('../db/Room')
 
 var GameServer = function(){};
 
@@ -10,19 +12,40 @@ var rooms = {
 	}
 };
 
+
+GameServer.db = function(){
+	return db.db;
+};
+
 GameServer.init = function(){
 	console.log('游戏引擎服务器初始化');
+	
 }
 
-GameServer.createRoom= function(roomName){
+/*
+GameServer.listRoom = function(){
+	Room.list(function(err,rooms,c){
+		
+	})
+}
+*/
+GameServer.createRoom= function(roomName, admin){
 	if(rooms[roomName]){
 		return false;
 	}
-	rooms[roomName]={
+	var room ={
 		'name': roomName,
-		'player':[],
-		'status':'empty'
+		'player':[admin],
+		'status':'empty',
+		'lastUpdate':new Date()
 	};
+	rooms[roomName] = room;
+	console.log(typeof Room);
+	console.log(typeof Room.create);
+
+	Room.create(room,function(){
+		console.log('xxxx');
+	})
 	return rooms[roomName];
 };
 

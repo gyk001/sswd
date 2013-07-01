@@ -1,10 +1,16 @@
 var server = require('../service/server');
+var Room = require('../db/Room');
 /*
  * GET home page.
  */
 exports.index = function(req, res){
 	if(req.session.user){
-  		res.render('index.jade', { rooms: server.rooms, abc:'abcdefg' });
+      Room.list(function(err,rooms){
+        if(err){
+          throw new Error('获取房间列表异常',err);
+        }
+  		  res.render('index.jade', { rooms: rooms, abc:'abcdefg' });
+      })
   	}else{
   		res.redirect('/login');
   	}

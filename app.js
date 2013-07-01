@@ -1,18 +1,17 @@
-
-/**
- * Module dependencies.
- */
-
-var express = require('express')
-  , app = express()
-  , routes = require('./routes')
-  , http = require('http')
+var http = require('http')
   , path = require('path')
+  , express = require('express')
+  , MongoStore = require('connect-mongo')(express)
+  , app = express()
   , server = http.createServer(app)
   , io = require('socket.io').listen(server);
 
 var gameServer= require('./service/server')
-  , room = require('./routes/room');
+  , room = require('./routes/room')
+  , routes = require('./routes')
+  , settings = require('./settings.json');
+
+gameServer.init();
 
 // all environments
 app.engine('jade', require('jade').__express);
@@ -24,11 +23,14 @@ app.use(express.logger('dev'));
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('guo-sswd'));
-app.use(express.session());
+app.use(express.session({
+  secret: settings.cookie_secret,
+  store: new MongoStore(settings.db)
+}));
+//app.use(express.session());
 app.use(app.router);
 app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.set('sswd',{rooms:{guo:'xxx'}});
 
 // development only
 if ('development' == app.get('env')) {
@@ -74,7 +76,7 @@ var news = io
     socket.emit('item', { news: 'item' });
   });
 
-gameServer.init();
+
 
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

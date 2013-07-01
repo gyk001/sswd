@@ -16,13 +16,14 @@ exports.join = function(req,res){
 	    	res.redirect('/');
 	 	});
 	}else{
-		server.joinRoom(user,);
+		server.joinRoom(user,roomName);
 	}
 	res.json({name:roomName,success:true});
 };
 
 exports.create = function(req,res){
 	var roomName = req.params.roomName;
+	var admin = req.session.user.name;
 	var room = server.createRoom(roomName);
 	res.render('snippets/room.jade', {room:room});
 	//var dom = jade.compline()

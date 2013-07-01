@@ -12,7 +12,9 @@
     "socket.io": "*",
     "ejs": "*",
     "jade": "*",
-    "stylus": "*"
+    "stylus": "*",
+    "connect-mongo": "*",
+    "mongoose": "*"
   },
   "engines": {
     "node": "0.8.x"

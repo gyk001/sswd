@@ -25,7 +25,7 @@
 			}).done(joinRoom).fail(function(){
 				alert('加入房间失败！');
 			});
-		})
+		});
 		$('#btn-new-room').click(function(){
 			var room = $('#ipt-new-room').val();
 			$.ajax({
@@ -34,7 +34,8 @@
 			}).done(createRoom).fail(function(){
 				alert('创建房间失败！');
 			});	
-		})
+		});
+		
 	});
 
 })(jQuery);

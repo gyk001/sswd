@@ -1,0 +1,10 @@
+{
+	"db":{
+		"db": "sswd",
+		"host": "localhost",
+		"port": 27017,
+		"auto_reconnect": true		
+		},
+	"cookie_secret": "sswd_secret"
+	
+}
