@@ -35,7 +35,7 @@
 				alert('创建房间失败！');
 			});	
 		});
-		
+		var socket = io.connect();
 	});
 
 })(jQuery);

@@ -1,18 +1,21 @@
 var http = require('http')
   , path = require('path')
   , express = require('express')
-  , MongoStore = require('connect-mongo')(express)
+//  , MongoStore = require('connect-mongo')(express)
   , app = express()
   , server = http.createServer(app)
-  , io = require('socket.io').listen(server);
+  , io = require('socket.io').listen(server)
+  , RedisStore = require('connect-redis')(express);
+  //, MemoryStore = require('connect').middleware.session.memory;
 
-var gameServer= require('./service/server')
-  , room = require('./routes/room')
+var room = require('./routes/room')
   , routes = require('./routes')
+  , login = require('./routes/login')
   , user = require('./routes/user')
-  , settings = require('./settings.json');
+  , settings = require('./settings.json')
+  , ee = require('./service/ee');
 
-gameServer.init();
+ee.emit(ee.SERVER_START);
 
 // all environments
 app.engine('jade', require('jade').__express);
@@ -26,7 +29,11 @@ app.use(express.methodOverride());
 app.use(express.logger('dev'));
 app.use(express.session({
   secret: settings.cookie_secret,
-  store: new MongoStore(settings.db)
+  //store: new MemoryStore({
+  //  reapInterval: 60000 * 10
+  //})
+  //new MongoStore(settings.db)
+  store: new RedisStore()
 }));
 //app.use(express.session());
 
@@ -47,10 +54,10 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/login', routes.login);
-app.get('/logout', routes.logout);
-app.post('/login', routes.doLogin);
-app.get('/login', routes.doLogin);
+app.get('/login', login.login);
+app.get('/logout', login.logout);
+app.post('/login', login.doLogin);
+app.get('/login', login.doLogin);
 //注册界面
 app.get('/user/reg',user.reg);
 //注册请求
@@ -89,8 +96,38 @@ var news = io
   .on('connection', function (socket) {
     socket.emit('item', { news: 'item' });
   });
+/*
+//设置session
+io.set('authorization', function(handshakeData, callback){
+  // 通过客户端的cookie字符串来获取其session数据
+  handshakeData.cookie = parseCookie(handshakeData.headers.cookie)
+  var connect_sid = handshakeData.cookie['connect.sid'];
+  
+  if (connect_sid) {
+    RedisStore.get(connect_sid, function(error, session){
+      if (error) {
+        // if we cannot grab a session, turn down the connection
+        callback(error.message, false);
+      }
+      else {
+        // save the session data and accept the connection
+        handshakeData.session = session;
+        callback(null, true);
+      }
+    });
+  }
+  else {
+    callback('nosession');
+  }
+});
 
-
+io.sockets.on('connection', function (socket){
+  var session = socket.session;//session
+  var name = session.user.loginName;
+  console.log(name);
+  socket.broadcast.emit('system message', '【'+name + '】回来了，大家赶紧去找TA聊聊~~');  
+});
+*/
 
 server.listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

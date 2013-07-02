@@ -5,6 +5,7 @@ li.span3(id="room-#{room.name}")
       h3 #{room.name}
       p 游戏状态：#{room.status}
       p 创建时间：#{room.createTime}
-      p 管理员：#{room.admin}
-      p 人数：#{room.player.length}
+      p 管理员：#{room.admin} 
+      p #{room.adm}
+      p 人数：#{room.player ? room.player.length : '--'}
       button.btn.btn-primary(data-room="#{room.name}") 加入房间
